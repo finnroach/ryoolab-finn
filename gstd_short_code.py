@@ -1,0 +1,21 @@
+seq = 'gagcccacttttataggggccggctgtggtcgccacaatgccggcaaacaagagttgtagcttgaagcgccccgcggggcgtggcaaggtggggagagaggtacagagagagagagagggggctgctagttgttgtcgtgcctgggttttttttttgtcttctattatattctgacttgcccacacatacccactaatggcgggcaaaaatgtgacgttagcggcgtgattaatacactgttgtgtggccatgggtgtgtggagacgattgatagtgtgtgtgtgcgtgctctggaggaggttgcactctatccgttccctcatacacctccaccatacccccgcaaaagaaagctgcaactttctaatgatcctccattggaacgaagccttttactcgcttaagaacaaattttgttacatttctttataatttctgattttaacaaacagataacaaagaagatacaatcctgccatacaggtattattaatcgtagggtatttacacatcgacttgctaagattagcaaacacataagcatgcaatcgattagcttgaaacacaattttgcatttctaatgaacatctgtgcgcctgaaaaaacataaattcttttaaaatgcaaaaaaaaataagtacaaacaaataagcaggcaaacagaaaccagataagaattcaagccggccggcaaacattgatatcaggcaaacatatatgtatgtatgtacatatgtacatatatagcaacagttgtcgagtatttccaacacacaagcaaatcgcgaaaggctcataccgtactaataagaccataaaaatataaccgtttttcgaattattcaatatactttgactcatagtaataattttaatgggtaagcccaagctatggtagacaaatagtagtagattaaatgatgagtcaaaggcacatgcaaattcgaaattactggtacacattttcaatgtaacaatatggatgggcttagtccatatatcgatcgacttttattgtttgtgtttgttatgacggccttgggttttaataagtaattgctgtgaccatataacatgaaaaggaatactagactttcatttcttggaagtatttgatactatcaaaggcgaacacttgaatattcctgctacacttcgctgggggtatttaatttccccaaaacaaattcgcttttatcagtttcacaattcgcaataccaactatcagcatgaccgggcaaaaaaattcaataacaagtaggaaaaaatggaaagagcattttcgtgggcgacacgtcaaacaaattgcgctcttaacgtcgagaacaatccacaaaacgattgtgaaatcaaaaattccgaaccccaagttccgagagttactcatttgaacataatgccgaaatccagctgaatcatgggaaacacgagatcgtaagtataagttcgccaataactggttgggttaattcaccaaaaagccggcccaaaaggtagcgtaaaatgtagagaaaggtcactgtgtttgccactgcagatcaaaaaaaccagttggacggcattgccaaatgtgcgtcacaggaaaataaagtgaaaagcgcaaactatttaaagagcaaagccaaagagaatggataggacgaagagccccaataatctcttacctccacatcatcgagatcttctgccggcctcccatatgagcacatttagcctacatacatctactttctcgattccgtttgccggtgattcgctttgtgtacagctgcgctgatctttctccgatctccgctttagaatacatattataccataaaactgaatatgttcaagtttagattgatatataaaaaagtaataaattattattattaaatttatgaagatctggggtgtgtccacatgtactcttacttccatatgacggcttgaacatacttttgaacatatttttcgaaatgtcaacaaaaaatgttgaaaatttttcctgttcttccacttgttttctcttgttcttattgaagtttgatttttaacatttaaaaaaccttcgtatgcatttgatttaatgaatcctctttgttttaattattttgctcggagcactataaaaacagaaattaaaatatcgatatatttatatataaacatataatataatatgattaccatatccgttactcagctagtgtgaatgtgaacgcgaaatttcatcatttttcatttttcattttctttttttgtttactacaataatacaattcatatataacacctttaagctattttatttcatcaccctttgtttgctgcctgtagtgtatggtaccaattttgtgactcatggaagtttacttatttaaatcgctccattccccttacgataaccatctaatcatacaaactagcataagctcgaacagaagtatacacattatgcacttgaaattatcattagcgctttcgtggcaccccttattagtcataatatgtacatacctcaaaaccgaaaagaacaaaagtttgaaaaagtttattctagccatgactggcattttttccaattgcaagacaaacaaaccacgcaagcataagcaaatgggtggagataattggtcgagcatttccctataaaagaaattaggtttactgggaattgtcaggcgtagttcagcactcagcaggttaacaacc'
+ 
+def Xrp1_binding_sites (seq, profile):
+    #find Xrp1 binding sites based on position frequency matrix (Baillon et al. 2018)
+    width = len(profile['T'])
+    bindingscore = []
+    for i in range(len(seq)-width):
+        score = 0
+        for j in range(width):
+            letter = seq[i+j]
+            score += profile [letter][j]
+        bindingscore.append (score)
+    return bindingscore
+ 
+profile = {'T':[0.624, 0.389, 0.169, 0.428, 0.001, 0.134, 0.001, 0.001, 0.704, 0.232], 'G':[0.078, 0.344, 0.362, 0.011, 0.997, 0.001, 0.001, 0.001, 0.001, 0.176], 'A': [0.252, 0.178, 0.468, 0.001, 0.001, 0.590, 0.997, 0.997, 0.082, 0.305], 'C':[0.046, 0.089, 0.001, 0.560, 0.001, 0.275, 0.001, 0.001, 0.213, 0.287]}
+upperseq = seq.upper ()
+bindingscores = Xrp1_binding_sites (upperseq, profile)
+from matplotlib import pyplot
+pyplot.plot (bindingscores)
+pyplot.ylim (6.2, 6.5)
+pyplot.show ()
